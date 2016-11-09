@@ -1,0 +1,16 @@
+Keeper bla bla
+
+Skip me # SKIP
+
+# INSERT insert me :)
+
+	  	#    INSERT inserted after indentations	
+Apa  # REPLACE  Pappa
+
+# START SKIP
+        fuck
+          duck
+            puck
+# END SKIP
+
+Abba   # REPLACE b  WITH B 
