@@ -1,8 +1,9 @@
 module Filter where
 
-import System.FilePath.Posix
+import System.FilePath.Posix (takeExtension)
 
 import Text.Megaparsec
+-- import Text.Megaparsec.Char
 import Text.Megaparsec.String
 import qualified Text.Megaparsec.Lexer as L
 
@@ -68,7 +69,7 @@ filters = choice [ try skipFilter
                  , try replaceWithFilter
                  , try replaceFilter
                  , try insertFilter
-                 , try skipLinesFilter
+                 , try skipLinesNestedFilter
                  , keepFilter]
 
 ------------------------------------------------------------------------------
@@ -139,8 +140,22 @@ replaceWithFilter = do
 ------------------------------------------------------------------------------
 -- Multi-line filter parsers
 
+
+-- http://stackoverflow.com/questions/40580164/parsing-block-comments-with-megaparsec-using-symbols-for-start-and-end/
+
+
 skipLinesFilter :: Parser Action
-skipLinesFilter = do
-  void $ prefix >> start >> skip >> newline
-  ss <- (manyTill anyChar (prefix >> end >> skip))
-  return . SkipLines $ lines ss
+skipLinesFilter = s >> manyTill anyChar e >>= return . SkipLines . lines
+  where
+    s = indentation >> prefix >> start >> skip >> newline
+    e = try $ indentation >> prefix >> end >> skip
+
+skipLinesNested :: Parser String
+skipLinesNested = s >> manyTill x e >>= return . concat
+  where
+    x = try skipLinesNested <|> (anyChar >>= return . pure)
+    s = indentation >> prefix >> start >> skip >> newline
+    e = try $ indentation >> prefix >> end >> skip
+
+skipLinesNestedFilter :: Parser Action
+skipLinesNestedFilter = skipLinesNested >>= return . SkipLines . lines

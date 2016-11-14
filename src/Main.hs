@@ -19,22 +19,20 @@ data Config = Config { filePaths :: [String]
 
 config :: Parser Config
 config = Config
-
-         <$> some (argument str (metavar "FILE..." <> help "Paths to text files"))
-
-         <*> strOption (   long "action-prefix"
-                         <> short 'p'
-                         <> value "#"
-                         <> showDefault
-                         <> metavar "ACTION-PREFIX"
-                         <> help "The prefix used to denote the beginning of an inline comment"
-                       )
+  <$> some (argument str (metavar "FILE..." <> help "Paths to text files"))
+  <*> strOption ( long "action-prefix"
+                  <> short 'p'
+                  <> value "#"
+                  <> showDefault
+                  <> metavar "ACTION-PREFIX"
+                  <> help "The prefix used to denote the beginning of an inline comment"
+                )
 
 filterFiles :: Config -> IO ()
 filterFiles c = do
   putStrLn . show $ c
   mapM_ filterFile $ filePaths c
-  
+
 main :: IO ()
 main = execParser opts >>= filterFiles
   where
