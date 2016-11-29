@@ -39,5 +39,5 @@ main = execParser opts >>= filterFiles
     opts = info (helper <*> config)
       (    fullDesc
         <> progDesc "Filter one ore more text FILEs according to actions\
-                    \specified as special comments in each text FILE."
+                    \ specified as special comments in each text FILE."
       )
