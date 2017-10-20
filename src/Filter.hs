@@ -42,7 +42,6 @@ getPrefix _     = symbol "#"
 
 filterFile :: String -> IO ()
 filterFile filePath = do
-  print . takeExtension $ filePath
   let p = getPrefix . takeExtension $ filePath
 
 

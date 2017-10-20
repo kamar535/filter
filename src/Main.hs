@@ -30,7 +30,6 @@ config = Config
 
 filterFiles :: Config -> IO ()
 filterFiles c = do
-  putStrLn . show $ c
   mapM_ filterFile $ filePaths c
 
 main :: IO ()
